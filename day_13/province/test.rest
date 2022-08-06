@@ -7,3 +7,13 @@ GET https://provinces.open-api.vn/api/p/1?depth=2 HTTP/1.1
 ###
 
 GET https://provinces.open-api.vn/api/d/1?depth=2 HTTP/1.1
+
+###
+
+POST https://provinces.open-api.vn/api/d/1?depth=2  HTTP/1.1
+Content-Type: application/json
+
+{
+    "name" : "hien",
+    "email" : "hien@techmaster.vn"
+}

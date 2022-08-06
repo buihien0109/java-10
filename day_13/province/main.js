@@ -22,7 +22,7 @@ const getProvince = async () => {
     }
 }
 
-// Lấy danh sách tỉnh thành phố
+// Lấy danh sách quận huyện
 const getDistrict = async (provinceCode) => {
     try {
         let res = await axios.get(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
