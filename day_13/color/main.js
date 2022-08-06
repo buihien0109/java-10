@@ -12,3 +12,6 @@ btnRandomColorName.addEventListener("click", async () => {
         alert(error.response.data.message);
     }
 })
+
+// console.log(btnRandomColorName.getAttribute("typeColor"));
+console.log(btnRandomColorName.dataset.type);
