@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.box {
+    width: 200px;
+    height: 200px;
+    background-color: black;
+
+    /* animation-name: animation;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate; */
+
+    animation: animationName 4s;
+
+    position: relative;
+}
+
+@keyframes animationName {
+    0% {
+        transform: translateX(0);
+        background-color: black;
+    }
+    25% {
+        transform: translateX(200px);
+        background-color: red;
+    }
+    50% {
+        transform: translate(200px, 200px);
+        background-color:coral
+    }
+    75% {
+        transform: translate(0px, 200px);
+        background-color:blue
+    }
+    100% {
+        transform: translateY(0);
+        background-color: black;
+    }
+}
+
