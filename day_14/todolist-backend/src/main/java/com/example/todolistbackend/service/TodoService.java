@@ -64,7 +64,7 @@ public class TodoService {
 
         todo.setTitle(request.getTitle());
         todo.setStatus(request.isStatus());
-        
+
         return todo;
     }
 
