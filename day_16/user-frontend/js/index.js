@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/api/v1/users"
+const API_URL = "http://localhost:8080/api/v1/users";
 
 // Truy cập vào các thành phần
 const tableContentEl = document.querySelector("tbody");
@@ -11,23 +11,23 @@ const getUsers = async () => {
     try {
         let res = await axios.get(API_URL);
         users = res.data;
-        console.log(users)
+        console.log(users);
 
-        renderUser(users);
+        renderPaginationAndUser(users);
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
+};
 
 // Hiển thị ds user
-const renderUser = arr => {
+const renderUser = (arr, pagination) => {
     tableContentEl.innerHTML = "";
 
-    let html = "";
+    let html = "";  
     arr.forEach((u, i) => {
         html += `
             <tr>
-                <td>${i + 1}</td>
+                <td>${pagination.pageSize * (pagination.pageNumber - 1) + (i + 1)}</td>
                 <td>${u.name}</td>
                 <td>${u.email}</td>
                 <td>${u.phone}</td>
@@ -37,9 +37,24 @@ const renderUser = arr => {
                     <button class="btn btn-danger">Xóa</button>
                 </td>
             </tr>
-        `
+        `;
     });
     tableContentEl.innerHTML = html;
-}
+};
+
+// Hiển thị phân trang
+const renderPaginationAndUser = (arr) => {
+    $(".pagination-container").pagination({
+        dataSource: arr,
+        pageSize: 5,
+        // showPrevious : false,
+        // showNext : false,
+        callback: function (data, pagination) {
+            console.log(data);
+            console.log(pagination);
+            renderUser(data, pagination);
+        },
+    });
+};
 
 getUsers();
