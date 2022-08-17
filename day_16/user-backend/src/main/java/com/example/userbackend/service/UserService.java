@@ -1,14 +1,14 @@
 package com.example.userbackend.service;
 
 import com.example.userbackend.dto.UserDto;
+import com.example.userbackend.exception.BadRequestException;
 import com.example.userbackend.exception.NotFoundException;
 import com.example.userbackend.model.User;
 import com.example.userbackend.repository.UserRepository;
+import com.example.userbackend.request.CreateUserRequest;
+import com.example.userbackend.request.UpdatePasswordRequest;
 import com.github.javafaker.Faker;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,11 +21,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final Faker faker;
     private final ModelMapper modelMapper;
+    private final EmailService emailService;
 
-    public UserService(UserRepository userRepository, Faker faker, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, Faker faker, ModelMapper modelMapper, EmailService emailService) {
         this.userRepository = userRepository;
         this.faker = faker;
         this.modelMapper = modelMapper;
+        this.emailService = emailService;
 
         initData();
     }
@@ -75,5 +77,57 @@ public class UserService {
         });
 
         userRepository.delete(user.getId());
+    }
+
+    // Tạo user
+    public UserDto createUser(CreateUserRequest request) {
+        // Kiểm tra email, xem có trùng với user nào đó hay không
+        // Nếu có -> Báo lỗi
+        if(userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new BadRequestException("Email = " + request + " đã tồn tại");
+        }
+
+        // Tạo user với các thông tin tử request
+        Random rd = new Random();
+        User user = User.builder()
+                .id(rd.nextInt(1000))
+                .name(request.getName())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .password(request.getPassword())
+                .address(request.getAddress())
+                .build();
+
+        userRepository.save(user);
+
+        // Trả về userDto sau khi tạo
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    public void forgotPassword(int id) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Không tìm thấy user có id = " + id);
+        });
+
+        // Generate password
+        Random rd = new Random();
+        String newPassword = String.valueOf(rd.nextInt(1000));
+
+        user.setPassword(newPassword);
+
+        // Send email
+        emailService.send("hien@techmaster.vn", "Quên mật khẩu", "Mật khẩu mới : " + newPassword);
+    }
+
+    public void updatePassword(int id, UpdatePasswordRequest request) {
+        // Kiểm tra id của user xem có tồn tại hay không -> Lỗi NotFound
+
+        // Kiểm tra oldPass có chính xác hay không
+        // Nếu oldPass không chính xác -> Lỗi BadRequest
+
+        // Kiểm tra oldPass có giống newPass hay không
+        // Nếu newPass giống oldPass -> Lỗi BadRequest
+
+        // Set lại newPass cho user
     }
 }

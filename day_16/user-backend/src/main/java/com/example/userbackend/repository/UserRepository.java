@@ -35,6 +35,13 @@ public class UserRepository {
                 .findFirst();
     }
 
+    // Lấy thông tin user theo email
+    public Optional<User> findByEmail(String email) {
+        return FakeDB.users.stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst();
+    }
+
     // Xóa user
     public void delete(User user) {
         FakeDB.users.remove(user);
