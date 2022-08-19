@@ -6,10 +6,12 @@ import com.example.userbackend.exception.NotFoundException;
 import com.example.userbackend.model.User;
 import com.example.userbackend.repository.UserRepository;
 import com.example.userbackend.request.CreateUserRequest;
+import com.example.userbackend.request.UpdateAvatarRequest;
 import com.example.userbackend.request.UpdatePasswordRequest;
 import com.github.javafaker.Faker;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +24,14 @@ public class UserService {
     private final Faker faker;
     private final ModelMapper modelMapper;
     private final EmailService emailService;
+    private final FileService fileService;
 
-    public UserService(UserRepository userRepository, Faker faker, ModelMapper modelMapper, EmailService emailService) {
+    public UserService(UserRepository userRepository, Faker faker, ModelMapper modelMapper, EmailService emailService, FileService fileService) {
         this.userRepository = userRepository;
         this.faker = faker;
         this.modelMapper = modelMapper;
         this.emailService = emailService;
+        this.fileService = fileService;
 
         initData();
     }
@@ -129,5 +133,46 @@ public class UserService {
         // Nếu newPass giống oldPass -> Lỗi BadRequest
 
         // Set lại newPass cho user
+    }
+
+    // Upload file
+    public String uploadFile(int id, MultipartFile file) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Không tìm thấy user có id = " + id);
+        });
+        return fileService.uploadFile(id, file);
+    }
+
+    // Xem file
+    public byte[] readFile(int id, String fileId) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Không tìm thấy user có id = " + id);
+        });
+        return fileService.readFile(id, fileId);
+    }
+
+    // Lấy danh sách file
+    public List<String> getFiles(int id) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Không tìm thấy user có id = " + id);
+        });
+        return fileService.getFiles(id);
+    }
+
+    // Xóa file
+    public void deleteFile(int id, String fileId) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Không tìm thấy user có id = " + id);
+        });
+        fileService.deleteFile(id, fileId);
+    }
+
+    // Cập nhật avatar
+    public void updateAvatar(int id, UpdateAvatarRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Không tìm thấy user có id = " + id);
+        });
+
+        user.setAvatar(request.getAvatar());
     }
 }
