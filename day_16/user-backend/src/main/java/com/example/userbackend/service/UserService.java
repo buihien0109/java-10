@@ -137,33 +137,33 @@ public class UserService {
 
     // Upload file
     public String uploadFile(int id, MultipartFile file) {
-        User user = userRepository.findById(id).orElseThrow(() -> {
+        if(userRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Không tìm thấy user có id = " + id);
-        });
+        }
         return fileService.uploadFile(id, file);
     }
 
     // Xem file
     public byte[] readFile(int id, String fileId) {
-        User user = userRepository.findById(id).orElseThrow(() -> {
+        if(userRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Không tìm thấy user có id = " + id);
-        });
+        }
         return fileService.readFile(id, fileId);
     }
 
     // Lấy danh sách file
     public List<String> getFiles(int id) {
-        User user = userRepository.findById(id).orElseThrow(() -> {
+        if(userRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Không tìm thấy user có id = " + id);
-        });
+        }
         return fileService.getFiles(id);
     }
 
     // Xóa file
     public void deleteFile(int id, String fileId) {
-        User user = userRepository.findById(id).orElseThrow(() -> {
+        if(userRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Không tìm thấy user có id = " + id);
-        });
+        }
         fileService.deleteFile(id, fileId);
     }
 

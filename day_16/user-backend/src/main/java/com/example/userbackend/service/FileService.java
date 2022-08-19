@@ -2,6 +2,7 @@ package com.example.userbackend.service;
 
 import com.example.userbackend.exception.BadRequestException;
 import com.example.userbackend.exception.NotFoundException;
+import com.example.userbackend.utils.Utils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ import java.util.List;
 @Service
 public class FileService {
     // Chỉ định folder gốc để upload file
-    private Path rootPath = Paths.get("uploads");
+    private final Path rootPath = Paths.get("uploads");
 
     public FileService() {
         createFolder(rootPath.toString());
@@ -75,8 +76,8 @@ public class FileService {
         // Kiểm tra extension
         // avatar.png -> png
         // image.jpg -> jpg
-        String fileExtension = getExtensionFile(fileName);
-        if(!checkFileExtension(fileExtension)) {
+        String fileExtension = Utils.getExtensionFile(fileName);
+        if(!Utils.checkFileExtension(fileExtension)) {
             throw new BadRequestException("File không hợp lệ");
         }
 
@@ -87,22 +88,6 @@ public class FileService {
             throw new BadRequestException("Kích thước file không được vượt quá 3MB");
         }
     }
-
-    // Lấy đuôi file
-    public String getExtensionFile(String fileName) {
-        int lastIndex = fileName.lastIndexOf(".");
-        if(lastIndex == -1) {
-            return "";
-        }
-        return fileName.substring(lastIndex + 1);
-    }
-
-    // Kiểm tra đuôi file
-    public boolean checkFileExtension(String fileExtension) {
-        List<String> extensions = new ArrayList<>(List.of("png", "jpg", "jpeg"));
-        return extensions.contains(fileExtension);
-    }
-
 
     public byte[] readFile(int id, String fileId) {
         // Lấy ra đường dẫn file tương ứng với user_id
