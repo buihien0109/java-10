@@ -50,35 +50,27 @@
         <div class="todo-container">
             <!-- Nơi hiển thị danh sách todo -->
             <div class="todo-list">
+                <p th:if="${#lists.isEmpty(todos)}" class="todos-empty">Không có công việc nào trong danh sách</p>
 
-                <!-- todo 1 -->
-                <div class="todo-item active-todo">
+                <div th:if="${not #lists.isEmpty(todos)}"
+                     th:each="todo : ${todos}"
+                     class="todo-item"
+                     th:classappend="${todo.status} ? 'active-todo' : ''"
+                >
                     <div class="todo-item-title">
-                        <input type="checkbox" checked />
-                        <p>Làm bài tập Javascript Phần array + string</p>
+                        <input
+                                type="checkbox"
+                                th:checked="${todo.status}"
+                                th:onclick="|toggleStatus(${todo.id})|"
+                        />
+                        <p th:text="${todo.title}">Mua đồ ăn trưa</p>
                     </div>
                     <div class="option">
-                        <button class="btn btn-update">
-                            <img src="./img/pencil.svg" alt="icon" />
+                        <button class="btn btn-update" th:onclick="|updateTodo(${todo.id})|">
+                            <img src="/img/pencil.svg" alt="icon" />
                         </button>
-                        <button class="btn btn-delete">
-                            <img src="./img/remove.svg" alt="icon" />
-                        </button>
-                    </div>
-                </div>
-
-                <!-- todo 2 -->
-                <div class="todo-item">
-                    <div class="todo-item-title">
-                        <input type="checkbox" />
-                        <p>Mua đồ ăn trưa</p>
-                    </div>
-                    <div class="option">
-                        <button class="btn btn-update">
-                            <img src="./img/pencil.svg" alt="icon" />
-                        </button>
-                        <button class="btn btn-delete">
-                            <img src="./img/remove.svg" alt="icon" />
+                        <button class="btn btn-delete" th:onclick="|deleteTodo(${todo.id})|">
+                            <img src="/img/remove.svg" alt="icon" />
                         </button>
                     </div>
                 </div>
@@ -88,7 +80,11 @@
     </div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<!--    <script th:src="@{/js/main.js}"></script>-->
+    <script th:inline="javascript">
+        let todos = [[${todos}]];
+        console.log(todos);
+    </script>
+    <script th:src="@{/js/main.js}"></script>
 </body>
 
 </html>

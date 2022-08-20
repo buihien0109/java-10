@@ -1,10 +1,9 @@
-const URL_API = "http://localhost:8080/api/todos";
+const URL_API = "/api/todos";
 
 // Truy cập vào các thành phần
 const todoListEl = document.querySelector(".todo-list");
 
-// Lưu lại công việc
-let todos = [];
+console.log(todos)
 
 // Danh sách API ======
 // 1. Lấy danh sách tất cả cv
@@ -81,5 +80,3 @@ const renderTodo = arr => {
 
     todoListEl.innerHTML = html;
 }
-
-getTodo();
