@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+</head>
+<body>
+
+<div th:replace="~{/fragments/menu :: menu}"></div>
+<div th:insert="~{/fragments/menu :: menu}"></div>
+
+<p class="text">Ngoài các lớp học đại trà, TechMaster Vietnam cũng cung cấp dịch vụ đào tạo cho doanh nghiệp với nội dung được thiết kế riêng theo yêu cầu của đối tác, thời gian và hình thức học linh hoạt, tối đa lợi ích và chi phí của khách hàng.</p>
+
+<div th:replace="~{ :: .text}"></div>
+<div th:replace="~{this :: .text}"></div>
+
+<div>
+    <h2>Home page</h2>
+</div>
+</body>
+</html>

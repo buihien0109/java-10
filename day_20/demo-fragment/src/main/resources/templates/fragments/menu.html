@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul th:fragment="menu" id="menu" class="menu">
+    <li>
+        <a href="/">Home page</a>
+    </li>
+    <li>
+        <a href="/about">About page</a>
+    </li>
+</ul>
+
+<div th:fragment="message(text)">
+    <p th:replace="${text}"></p>
+</div>
+
+<div th:fragment="random-message(number)">
+    <th:block th:switch="${number}">
+        <span th:case="0">
+            <th:block th:replace="~{:: #text}"></th:block>
+        </span>
+        <span th:case="1">
+            <th:block th:replace="~{:: #text-1}"></th:block>
+        </span>
+        <span th:case="2">
+            <th:block th:replace="~{:: #text-2}"></th:block>
+        </span>
+        <span th:case="*">
+            Không hợp lệ
+        </span>
+    </th:block>
+</div>
+
+<p id="text">Ngoài các lớp học đại trà, TechMaster Vietnam cũng cung cấp dịch vụ đào tạo cho doanh nghiệp với nội dung được thiết kế riêng theo yêu cầu của đối tác, thời gian và hình thức học linh hoạt, tối đa lợi ích và chi phí của khách hàng.</p>
+
+<p id="text-1">Chương trình đào tạo của TechMaster luôn được cải tiến, cập nhật theo nhu cầu của thị trường và phản hồi của học viên. Một số khóa học đào tạo cho doanh nghiệp đã trở thành chương trình đào tạo nhân viên thường niên của các doanh nghiệp lớn, đảm bảo cung cấp nguồn nhân sự chất lượng cho doanh nghiệp.</p>
+
+<p id="text-2">Đối với các lớp học đại trà, nội dung học được nghiên cứu, khảo sát từ nhu cầu của các doanh nghiệp để xây dựng nên lộ trình và nội dung phù hợp.</p>
+</body>
+</html>
