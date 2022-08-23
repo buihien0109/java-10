@@ -1,35 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{/layout/layout :: main-layout(~{:: title}, ~{:: #css}, ~{:: #product})}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/product.css">
+
+    <th:block id="css">
+        <link rel="stylesheet" href="/css/product.css">
+    </th:block>
 </head>
 <body>
-    <div id="header">
-        <div class="container">
-            <div class="header-inner">
-                <div class="logo">
-                    <h3>💖BUIHIEN-SHOP💖</h3>
-                </div>
-                <div class="menu">
-                    <div class="menu-list">
-                        <a href="./index.html" class="menu-item">Trang chủ</a>
-                        <a href="./shop.html" class="menu-item">Shop</a>
-                        <a href="./buy.html" class="menu-item">Hướng dẫn mua hàng</a>
-                        <a href="./contact.html" class="menu-item btn-contact">Liên hệ</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="product">
+<div id="product">
         <div class="container">
             <div class="banner-wrapper">
-                <img src="./images/bg-discount2.png" alt="banner-discount">
+                <img src="/images/bg-discount2.png" alt="banner-discount">
             </div>
             <h2 class="title-main">Ưu đãi trong thời gian có hạn</h2>
             <div class="card-list">
@@ -179,10 +163,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div id="footer">
-        <p class="author">💖Bùi Hiên💖</p>
-        <p class="copy-right">✌✌Girl learn to code - 2020✌✌</p>
     </div>
 </body>
 </html>
