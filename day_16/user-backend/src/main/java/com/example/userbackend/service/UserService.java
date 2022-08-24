@@ -120,7 +120,7 @@ public class UserService {
         user.setPassword(newPassword);
 
         // Send email
-        emailService.send("hien@techmaster.vn", "Quên mật khẩu", "Mật khẩu mới : " + newPassword);
+        emailService.send("abc@gmail.com", "Quên mật khẩu", "Mật khẩu mới : " + newPassword);
     }
 
     public void updatePassword(int id, UpdatePasswordRequest request) {

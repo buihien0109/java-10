@@ -5,10 +5,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-    private List<Product> products;
+    private final List<Product> products;
 
     public ProductService() {
         products = new ArrayList<>();
@@ -28,16 +29,23 @@ public class ProductService {
 
     // Trả về danh sách tất cả sản phẩm
     public List<Product> getProducts() {
-        return null;
+        return products;
     }
 
     // Trả về sản phẩm hot (sắp xếp sellCount giảm dần -> lấy ra N sản phẩm)
     public List<Product> getProductsHot(int count) {
-        return null;
+        return products.stream()
+                .sorted((a, b) -> b.getSellCount() - a.getSellCount())
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
     // Trả về sản phẩm khuyến mại (sắp xếp sản phẩm theo biên độ giá giảm nhiều nhất -> lấy ra N sản phẩm)
     public List<Product> getProductsDiscount(int count) {
-        return null;
+        return products.stream()
+                .filter(product -> product.getPriceDiscount() != 0)
+                .sorted((a, b) -> (b.getPrice() - b.getPriceDiscount()) - (a.getPrice() - a.getPriceDiscount()))
+                .limit(count)
+                .collect(Collectors.toList());
     }
 }

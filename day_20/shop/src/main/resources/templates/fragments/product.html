@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="card-item" th:fragment="product(p)">
+  <div class="card-thumb">
+    <img th:src="${p.thumbnail}" th:alt="${p.name}">
+  </div>
+  <div class="card-info">
+    <h3 class="card-name" th:text="${p.name}">Sản phẩm 10</h3>
+    <div class="card-price" th:classappend="${p.priceDiscount > 0 ? 'has-discount' : ''}">
+      <p class="price-normal" th:text="${#numbers.formatCurrency(p.price)}">
+        550.000&nbsp;₫</p>
+      <p class="price-discount" th:text="${#numbers.formatCurrency(p.priceDiscount)}"
+         th:if="${p.priceDiscount > 0}">500.000&nbsp;₫</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
