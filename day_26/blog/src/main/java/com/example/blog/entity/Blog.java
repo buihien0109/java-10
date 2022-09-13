@@ -29,6 +29,9 @@ public class Blog {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

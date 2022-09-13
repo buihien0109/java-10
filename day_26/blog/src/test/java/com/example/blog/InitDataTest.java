@@ -113,6 +113,10 @@ class InitDataTest {
             // Random 1 user
             User rdUser = users.get(rd.nextInt(users.size()));
 
+            // Random ra 1 image
+            List<Image> images = imageRepository.getByUser_Id(rdUser.getId());
+            String link = images.get(rd.nextInt(images.size())).getUrl();
+
             // Random 1 set category
             Set<Category> rdCategories = new HashSet<>();
             for (int j = 0; j < 3; j++) {
@@ -124,6 +128,7 @@ class InitDataTest {
                     .title(faker.lorem().sentence(10))
                     .description(faker.lorem().sentence(30))
                     .content(faker.lorem().sentence(100))
+                    .thumbnail(link)
                     .status(rd.nextInt(2) == 0)
                     .user(rdUser)
                     .categories(rdCategories)
