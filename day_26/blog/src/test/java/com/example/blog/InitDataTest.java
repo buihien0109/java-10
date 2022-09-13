@@ -132,4 +132,29 @@ class InitDataTest {
             blogRepository.save(blog);
         }
     }
+
+    @Test
+    void save_comment() {
+        // Lấy danh sách user
+        List<User> users = userRepository.findAll();
+
+        // Lấy danh sách blog
+        List<Blog> blogs = blogRepository.findAll();
+
+        for (int i = 0; i < 100; i++) {
+            // Random 1 user
+            User rdUser = users.get(rd.nextInt(users.size()));
+
+            // Random 1 blog
+            Blog rdBlog = blogs.get(rd.nextInt(blogs.size()));
+
+            Comment comment = Comment.builder()
+                    .content(faker.lorem().sentence(20))
+                    .blog(rdBlog)
+                    .user(rdUser)
+                    .build();
+
+            commentRepository.save(comment);
+        }
+    }
 }
