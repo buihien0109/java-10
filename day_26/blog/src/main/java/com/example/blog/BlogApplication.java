@@ -1,6 +1,7 @@
 package com.example.blog;
 
 import com.github.javafaker.Faker;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -22,5 +23,10 @@ public class BlogApplication {
     @Bean
     public Random random() {
         return new Random();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }
