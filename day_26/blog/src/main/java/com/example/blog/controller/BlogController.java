@@ -1,12 +1,16 @@
 package com.example.blog.controller;
 
+import com.example.blog.request.CreateBlogRequest;
 import com.example.blog.service.BlogService;
 import com.example.blog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class BlogController {
@@ -49,5 +53,13 @@ public class BlogController {
     @GetMapping("/admin/blogs/{id}/detail")
     public String getBlogDetailPage(@PathVariable String id) {
         return "admin/blog/blog-detail";
+    }
+
+    @PostMapping("/api/admin/blogs")
+    public ResponseEntity<?> createBlog(@RequestBody CreateBlogRequest request) {
+        // Todo : Về sau userId chính là id của user đang login
+        Integer userId = 1;
+
+        return ResponseEntity.ok(blogService.createBlog(userId, request));
     }
 }

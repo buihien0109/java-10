@@ -31,30 +31,19 @@
                 <div class="col-lg-8">
                     <div class="all-blog-posts">
                         <div class="row">
-                            <div class="col-lg-6" th:each="blog : ${blogs}">
+                            <div class="col-lg-6">
                                 <div class="blog-post">
                                     <div class="blog-thumb">
-                                        <img th:src="${blog.thumbnail}" th:alt="${blog.title}" />
+                                        <img src="assets/images/blog-thumb-01.jpg" alt="">
                                     </div>
                                     <div class="down-content">
-                                        <a th:href="@{/blogs/{id}/{slug} (id = ${blog.id}, slug = ${blog.slug})}">
-                                            <h4 th:text="${#strings.substring(blog.title,0,20) + ' ...'}">Donec tincidunt leo</h4>
-                                        </a>
+                                        <a href="/blogs/1"><h4>Donec tincidunt leo</h4></a>
                                         <ul class="post-info">
-                                            <li><a href="#" th:text="${blog.authorInfo.name}">Admin</a></li>
-                                            <li>
-                                                <a href="#" th:text="${blog.pulishedAt}">31/05/2020</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" th:text="|${blog.countComment} Comments|">12 Comments</a>
-                                            </li>
+                                            <li><a href="#">Admin</a></li>
+                                            <li><a href="#">31/05/2020</a></li>
+                                            <li><a href="#">12 Comments</a></li>
                                         </ul>
-                                        <p th:text="${#strings.substring(blog.description,0,100) + ' ...'}">
-                                            Nullam nibh mi, tincidunt sed
-                                            sapien ut, rutrum hendrerit
-                                            velit. Integer auctor a mauris
-                                            sit amet eleifend.
-                                        </p>
+                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
                                     </div>
                                 </div>
                             </div>

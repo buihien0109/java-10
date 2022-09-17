@@ -1,5 +1,6 @@
 package com.example.blog.entity;
 
+import com.example.blog.dto.BlogInfo;
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,6 +8,37 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+
+@SqlResultSetMappings(value = {
+        @SqlResultSetMapping(
+                name = "blogInfo",
+                classes = @ConstructorResult(
+                        targetClass = BlogInfo.class,
+                        columns = {
+                                @ColumnResult(name = "id", type = Integer.class),
+                                @ColumnResult(name = "title", type = String.class),
+                                @ColumnResult(name = "description", type = String.class),
+                                @ColumnResult(name = "thumbnail", type = String.class),
+                                @ColumnResult(name = "published_at", type = LocalDateTime.class),
+                                @ColumnResult(name = "count_comment", type = Integer.class),
+                                @ColumnResult(name = "author", type = String.class),
+                        }
+                )
+        )
+})
+@NamedNativeQuery(
+        name = "getAllBlogInfo",
+        resultSetMapping = "blogInfo",
+        query = "SELECT b.id, b.title, b.description, b.thumbnail, b.published_at,\n" +
+                "COUNT(c.id) AS count_comment, JSON_OBJECT(\"id\", u.id , \"name\", u.name) AS author\n" +
+                "FROM blog b \n" +
+                "LEFT JOIN user u\n" +
+                "ON b.user_id = u.id\n" +
+                "LEFT JOIN comment c\n" +
+                "ON b.id = c.blog_id\n" +
+                "WHERE b.status = true\n" +
+                "GROUP BY b.id\n" +
+                "ORDER BY b.created_at DESC")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
