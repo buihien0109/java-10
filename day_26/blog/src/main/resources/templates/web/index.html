@@ -31,19 +31,19 @@
                 <div class="col-lg-8">
                     <div class="all-blog-posts">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-6" th:each="blog : ${blogs}">
                                 <div class="blog-post">
                                     <div class="blog-thumb">
-                                        <img src="assets/images/blog-thumb-01.jpg" alt="">
+                                        <img th:src="${blog.thumbnail}" th:alt="${blog.title}">
                                     </div>
                                     <div class="down-content">
-                                        <a href="/blogs/1"><h4>Donec tincidunt leo</h4></a>
+                                        <a th:href="@{/blogs/{id} (id=${blog.id})}"><h4 th:text="${blog.title}">Donec tincidunt leo</h4></a>
                                         <ul class="post-info">
-                                            <li><a href="#">Admin</a></li>
-                                            <li><a href="#">31/05/2020</a></li>
-                                            <li><a href="#">12 Comments</a></li>
+                                            <li><a href="#" th:text="${blog.author.name}">Admin</a></li>
+                                            <li><a href="#" th:text="${#temporals.format(blog.publishedAt, 'dd/mm/yyy')}">31/05/2020</a></li>
+                                            <li><a href="#" th:text="|${blog.countComment} Comments|">12 Comments</a></li>
                                         </ul>
-                                        <p>Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
+                                        <p th:text="${blog.description}">Nullam nibh mi, tincidunt sed sapien ut, rutrum hendrerit velit. Integer auctor a mauris sit amet eleifend.</p>
                                     </div>
                                 </div>
                             </div>

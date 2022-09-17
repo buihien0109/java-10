@@ -131,10 +131,25 @@
     const descriptionEl = document.getElementById("description");
     const statusEl = document.getElementById("status");
     const categoryEl = $("#category");
-    const thumbnailEl = document.getElementById("thumbnail");
     const btnCreate = document.getElementById("btn-create");
 
     // Tạo blog
+    btnCreate.addEventListener("click", async () => {
+      try {
+        let res = await axios.post("/api/admin/blogs", {
+          title : titleEl.value,
+          description : descriptionEl.value,
+          status : +statusEl.value,
+          content : easyMDE.value(),
+          categoryIds : categoryEl.val().map(e => Number(e))
+        })
+
+        alert("Tạo bài viết thành công")
+        window.location.href = "/admin/blogs";
+      } catch (e) {
+        console.log(e)
+      }
+    })
 
   </script>
 </th:block>

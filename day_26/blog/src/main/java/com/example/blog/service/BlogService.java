@@ -1,6 +1,7 @@
 package com.example.blog.service;
 
 import com.example.blog.dto.BlogDto;
+import com.example.blog.dto.BlogInfo;
 import com.example.blog.entity.Blog;
 import com.example.blog.entity.Category;
 import com.example.blog.entity.User;
@@ -72,5 +73,15 @@ public class BlogService {
         blogRepository.save(blog);
 
         return modelMapper.map(blog, BlogDto.class);
+    }
+
+    public List<BlogInfo> getAllBlogInfo() {
+        return blogRepository.getAllBlogInfo();
+    }
+
+    public Object getBlogInfoById(Integer id) {
+        List<BlogInfo> blogInfos = blogRepository.getAllBlogInfo();
+
+        return null;
     }
 }

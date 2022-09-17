@@ -1,6 +1,7 @@
 package com.example.blog.entity;
 
 import com.example.blog.dto.BlogInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.Set;
                                 @ColumnResult(name = "id", type = Integer.class),
                                 @ColumnResult(name = "title", type = String.class),
                                 @ColumnResult(name = "description", type = String.class),
+                                @ColumnResult(name = "content", type = String.class),
                                 @ColumnResult(name = "thumbnail", type = String.class),
                                 @ColumnResult(name = "published_at", type = LocalDateTime.class),
                                 @ColumnResult(name = "count_comment", type = Integer.class),
@@ -29,7 +31,7 @@ import java.util.Set;
 @NamedNativeQuery(
         name = "getAllBlogInfo",
         resultSetMapping = "blogInfo",
-        query = "SELECT b.id, b.title, b.description, b.thumbnail, b.published_at,\n" +
+        query = "SELECT b.id, b.title, b.description, b.content, b.thumbnail, b.published_at,\n" +
                 "COUNT(c.id) AS count_comment, JSON_OBJECT(\"id\", u.id , \"name\", u.name) AS author\n" +
                 "FROM blog b \n" +
                 "LEFT JOIN user u\n" +

@@ -16,15 +16,17 @@ public class BlogInfo implements Serializable{
     private Integer id;
     private String title;
     private String description;
+    private String content;
     private String thumbnail;
     private LocalDateTime publishedAt;
     private Integer countComment;
     private AuthorInfo author;
 
-    public BlogInfo(Integer id, String title, String description, String thumbnail, LocalDateTime publishedAt, Integer countComment, String author) {
+    public BlogInfo(Integer id, String title, String description, String content, String thumbnail, LocalDateTime publishedAt, Integer countComment, String author) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.content = content;
         this.thumbnail = thumbnail;
         this.publishedAt = publishedAt;
         this.countComment = countComment;
