@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,9 @@ public class AuthService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public String login(LoginRequest request, HttpSession session) {
         try {
@@ -82,7 +86,7 @@ public class AuthService {
 
         // Tạo user mới
         User user = new User(request.getName(),
-                request.getEmail(), request.getPassword(), List.of("USER")
+                request.getEmail(), passwordEncoder.encode(request.getPassword()), List.of("USER")
         );
         userRepository.save(user);
 
@@ -104,7 +108,33 @@ public class AuthService {
         return link;
     }
 
+    @Transactional
     public String confirm(String token) {
-        return null;
+        Optional<TokenConfirm> tokenConfirmOptional = tokenConfirmRepository.findByToken(token);
+        if(tokenConfirmOptional.isEmpty()) {
+            throw new NotFoundException("Token not found");
+        }
+
+        // Kiểm tra xem token đã được kích hoạt hay chưa
+        TokenConfirm tokenConfirm = tokenConfirmOptional.get();
+        if(tokenConfirm.getConfirmedAt() != null) {
+            throw new BadRequestException("Token đã được kích hoạt");
+        }
+
+        // Kiểm tra còn thời gian hay không
+        if(tokenConfirm.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("Token đã hết hạn");
+        }
+
+        // Set lại thời gian kích hoạt của token
+        tokenConfirm.setConfirmedAt(LocalDateTime.now());
+        tokenConfirmRepository.save(tokenConfirm);
+
+        // Kích hoạt user
+        User user = tokenConfirm.getUser();
+        user.setEnabled(true);
+        userRepository.save(user);
+
+        return "confirmed";
     }
 }

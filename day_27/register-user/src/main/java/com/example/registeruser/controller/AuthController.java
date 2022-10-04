@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     // http://localhost:8080/api/auth/confirm?token=hddkdjj_8hdi92h
-    @PostMapping("/confirm")
+    @GetMapping("/confirm")
     public String confirm(@RequestParam String token) {
         return authService.confirm(token);
     }
