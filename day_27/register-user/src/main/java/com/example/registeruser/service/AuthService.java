@@ -1,6 +1,11 @@
 package com.example.registeruser.service;
 
+import com.example.registeruser.entity.TokenConfirm;
+import com.example.registeruser.entity.User;
+import com.example.registeruser.exception.BadRequestException;
 import com.example.registeruser.exception.NotFoundException;
+import com.example.registeruser.repository.TokenConfirmRepository;
+import com.example.registeruser.repository.UserRepository;
 import com.example.registeruser.request.LoginRequest;
 import com.example.registeruser.request.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +15,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TokenConfirmRepository tokenConfirmRepository;
+
+    @Autowired
+    private MailService mailService;
 
     public String login(LoginRequest request, HttpSession session) {
         try {
@@ -34,8 +53,7 @@ public class AuthService {
             session.setAttribute("MY_SESSION", authentication.getName());
 
             return "Đăng nhập thành công";
-        }
-        catch (AuthenticationException e) {
+        } catch (AuthenticationException e) {
             throw new NotFoundException("Tài khoản hoặc mật khẩu không chính xác");
         }
     }
@@ -45,8 +63,45 @@ public class AuthService {
         return "Đăng xuất thành công";
     }
 
+    @Transactional
     public String register(RegisterRequest request) {
-        return null;
+        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (!user.getEnabled()
+                    && user.getName().equals(request.getName())
+                    && user.getEmail().equals(request.getEmail())
+            ) {
+                // Generate ra token va send mail
+                // return link kích hoạt ở đây
+                return generateTokenAndSendMail(user);
+            }
+            throw new BadRequestException("Tài khoản đã được kích hoạt");
+        }
+
+        // Tạo user mới
+        User user = new User(request.getName(),
+                request.getEmail(), request.getPassword(), List.of("USER")
+        );
+        userRepository.save(user);
+
+        return generateTokenAndSendMail(user);
+    }
+
+    public String generateTokenAndSendMail(User user) {
+        // Tạo token
+        String generateToken = UUID.randomUUID().toString();
+        TokenConfirm tokenConfirm = new TokenConfirm(
+                generateToken, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15), user);
+
+        tokenConfirmRepository.save(tokenConfirm);
+
+        // Tạo link và send email
+        String link = "http://localhost:8080/api/auth/confirm?token=" + generateToken;
+        mailService.send(user.getEmail(), "Kích hoạt tài khoản", link);
+
+        return link;
     }
 
     public String confirm(String token) {
