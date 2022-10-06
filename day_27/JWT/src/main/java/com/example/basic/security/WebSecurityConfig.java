@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logout()
                     .logoutUrl("/api/auth/logout-handle")
                     .invalidateHttpSession(true)
-                    .deleteCookies("JWT_TOKEN", "JSESSIONID")
+                    .deleteCookies("JWT_COOKIE")
                     .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
                     .permitAll()
                 .and()

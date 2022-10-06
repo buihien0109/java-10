@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,13 +66,18 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Generate JWT token
+            String token = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
 
-
-            // Lưu thông tin vào trong cookie
-
+            // Lưu thông tin vào trong cookie (nếu không sử dụng cookie thì trả thẳng token về
+            // cho client và mỗi request mà client gửi lên phải kèm theo token trong header của request)
+            Cookie cookie = new Cookie("JWT_COOKIE", token);
+            cookie.setPath("/");
+            cookie.setMaxAge(MAX_AGE_COOKIE); // thời gian hết hạn cookie
+            cookie.setHttpOnly(true); // không có phép client chỉnh sửa thông tin trong cookie (read-only)
+            httpServletResponse.addCookie(cookie);
 
             // Trả về token cho client
-            return null;
+            return token;
         } catch (Exception ex) {
             throw new BadRequestException("Email hoặc mật khẩu không chính xác");
         }
